@@ -7,6 +7,14 @@
         <div class="product">
           <div class="product-display">
             <img src="../images/image-product-1.jpg" alt="product image" />
+            <div class="swipe-btns">
+              <button class="swipeBtn">
+                <img src="../images/icon-previous.svg" alt="swipe previous" />
+              </button>
+              <button class="swipeBtn">
+                <img src="../images/icon-next.svg" alt="swipe next" />
+              </button>
+            </div>
           </div>
           <div class="product-carousel">
             <div><img src="../images/image-product-1-thumbnail.jpg" alt="shoe thumbnail" /></div>
@@ -35,10 +43,12 @@
               <span id="total">0</span>
               <button id="plus"><img src="../images/icon-plus.svg" /></button>
             </div>
-            <button class="Btn fw-bold">
-              <img class="cart" src="../images/icon-cart.svg" />
-              <span>Add to Cart</span>
-            </button>
+            <div class="cart">
+              <button class="Btn fw-bold">
+                <img class="cart" src="../images/icon-cart.svg" />
+                <span>Add to Cart</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -49,6 +59,14 @@
 <style scoped>
 .old-price {
   text-decoration: line-through;
+}
+
+.swipe-btns {
+  display: none;
+}
+
+.even-columns {
+  margin-top: 3.8rem;
 }
 
 .pb-10 {
@@ -115,6 +133,41 @@
 @media (max-width: 50em) {
   .product-carousel {
     display: none;
+  }
+
+  .content {
+    margin-top: 0;
+  }
+
+  .swipe-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -11rem;
+    margin-bottom: 11rem;
+    margin-inline: 10px;
+  }
+
+  .swipeBtn {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  #plus {
+    outline: none;
+    border: none;
+    width: 30px;
+  }
+
+  #minus {
+    outline: none;
+    border: none;
+    width: 30px;
   }
 }
 </style>
