@@ -28,11 +28,15 @@ const addToCart = () => {
     }
   }
 }
+
+const clearCart = () => {
+  cartTotal.value = []
+}
 </script>
 
 <template>
   <main>
-    <NavComponent :cart-total="cartTotal" />
+    <NavComponent :cart-total="cartTotal" @clear-cart="clearCart" />
     <ProductCard
       :sneaker-total="sneakerTotal"
       @increment="addSneaker"

@@ -1,8 +1,16 @@
 <script setup>
 import CartTotal from './slots/CartTotal.vue'
 import { ref } from 'vue'
+import { defineEmits } from 'vue'
+
+const emit = defineEmits(['clear-cart'])
+
+const clearCart = () => {
+  emit('clear-cart')
+}
 
 const isNavOpen = ref(false)
+const isCartVisible = ref(false)
 
 const toggleNav = () => {
   isNavOpen.value = !isNavOpen.value
@@ -19,6 +27,10 @@ const navList = ref([
   { id: 4, value: 'About' },
   { id: 1, value: 'Contact' },
 ])
+
+const toggleCart = () => {
+  isCartVisible.value = !isCartVisible.value
+}
 </script>
 
 <template>
@@ -57,10 +69,10 @@ const navList = ref([
         </nav>
         <div class="cart-box">
           <div class="cart">
-            <img src="../images/icon-cart.svg" alt="shopping cart" />
+            <img src="../images/icon-cart.svg" alt="shopping cart" @click="toggleCart" width="25" />
             <div v-if="props.cartTotal.length > 0" class="cart-total">{{ props.cartTotal[0] }}</div>
             <div v-else class="cart-total">0</div>
-            <CartTotal>
+            <CartTotal v-if="isCartVisible">
               <p class="cart-title text-dark">Cart</p>
               <div v-if="props.cartTotal[0] && props.cartTotal[0] > 0">
                 <div class="cart-display-total">
@@ -74,7 +86,7 @@ const navList = ref([
                       ><span> ${{ props.cartTotal[0] * 125 }}</span>
                     </p>
                   </div>
-                  <button class="cart-delete">
+                  <button class="cart-delete" @click="clearCart">
                     <img src="../images/icon-delete.svg" alt="delete icon" />
                   </button>
                 </div>
