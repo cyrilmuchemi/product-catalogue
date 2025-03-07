@@ -1,4 +1,48 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import { defineEmits } from 'vue'
+import product1 from '@/images/image-product-1.jpg'
+import product2 from '@/images/image-product-2.jpg'
+import product3 from '@/images/image-product-3.jpg'
+import product4 from '@/images/image-product-4.jpg'
+
+import thumb1 from '@/images/image-product-1-thumbnail.jpg'
+import thumb2 from '@/images/image-product-2-thumbnail.jpg'
+import thumb3 from '@/images/image-product-3-thumbnail.jpg'
+import thumb4 from '@/images/image-product-4-thumbnail.jpg'
+
+const selectedImage = ref(product1)
+const selectedIndex = ref(0)
+defineProps({
+  sneakerTotal: Number,
+})
+
+const emit = defineEmits(['increment', 'decrement', 'add-to-cart'])
+
+const handleIncrese = () => {
+  emit('increment')
+}
+
+const handleDecrese = () => {
+  emit('decrement')
+}
+
+const addToCartHandler = () => {
+  emit('add-to-cart')
+}
+
+const thumbnails = [
+  { thumb: thumb1, full: product1 },
+  { thumb: thumb2, full: product2 },
+  { thumb: thumb3, full: product3 },
+  { thumb: thumb4, full: product4 },
+]
+
+const changeImage = (image, index) => {
+  selectedImage.value = image
+  selectedIndex.value = index
+}
+</script>
 
 <template>
   <section>
@@ -6,7 +50,7 @@
       <div class="even-columns">
         <div class="product">
           <div class="product-display">
-            <img src="../images/image-product-1.jpg" alt="product image" />
+            <img :src="selectedImage" alt="product image" />
             <div class="swipe-btns">
               <button class="swipeBtn">
                 <img src="../images/icon-previous.svg" alt="swipe previous" />
@@ -17,10 +61,14 @@
             </div>
           </div>
           <div class="product-carousel">
-            <div><img src="../images/image-product-1-thumbnail.jpg" alt="shoe thumbnail" /></div>
-            <div><img src="../images/image-product-2-thumbnail.jpg" alt="shoe thumbnail" /></div>
-            <div><img src="../images/image-product-3-thumbnail.jpg" alt="shoe thumbnail" /></div>
-            <div><img src="../images/image-product-4-thumbnail.jpg" alt="shoe thumbnail" /></div>
+            <div
+              v-for="(image, index) in thumbnails"
+              :key="index"
+              @click="changeImage(image.full, index)"
+              :class="{ active: selectedIndex === index }"
+            >
+              <img :src="image.thumb" alt="shoe thumbnail" />
+            </div>
           </div>
         </div>
         <div class="content">
@@ -39,12 +87,16 @@
           </div>
           <div class="d-flex cart-logic pt-10">
             <div class="cart-btns fw-bold">
-              <button id="minus"><img src="../images/icon-minus.svg" /></button>
-              <span id="total">0</span>
-              <button id="plus"><img src="../images/icon-plus.svg" /></button>
+              <button id="minus" @click="handleDecrese">
+                <img src="../images/icon-minus.svg" />
+              </button>
+              <span id="total">{{ sneakerTotal }}</span>
+              <button id="plus" @click="handleIncrese">
+                <img src="../images/icon-plus.svg" />
+              </button>
             </div>
             <div class="cart">
-              <button class="Btn fw-bold">
+              <button class="Btn fw-bold" @click="addToCartHandler">
                 <img class="cart" src="../images/icon-cart.svg" />
                 <span>Add to Cart</span>
               </button>
@@ -57,6 +109,11 @@
 </template>
 
 <style scoped>
+.product-display img {
+  width: 100%;
+  display: block;
+}
+
 .old-price {
   text-decoration: line-through;
 }
@@ -120,14 +177,22 @@
   cursor: pointer;
 }
 
-.product-carousel > div :hover,
-.product-carousel > div :focus-visible {
+.product-carousel > div :hover {
+  border: 4px solid hsl(26, 100%, 55%);
+}
+
+.product-carousel > div.active {
   border: 4px solid hsl(26, 100%, 55%);
   background-color: hsl(219, 9%, 45%) !important;
+  opacity: 0.6;
 }
 
 .content {
   margin-top: 4rem;
+}
+
+.cart-btns > button {
+  cursor: pointer;
 }
 
 @media (max-width: 50em) {

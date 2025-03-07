@@ -1,4 +1,5 @@
 <script setup>
+import CartTotal from './slots/CartTotal.vue'
 import { ref } from 'vue'
 
 const isNavOpen = ref(false)
@@ -6,6 +7,10 @@ const isNavOpen = ref(false)
 const toggleNav = () => {
   isNavOpen.value = !isNavOpen.value
 }
+
+const props = defineProps({
+  cartTotal: Array,
+})
 
 const navList = ref([
   { id: 1, value: 'Collections' },
@@ -53,26 +58,30 @@ const navList = ref([
         <div class="cart-box">
           <div class="cart">
             <img src="../images/icon-cart.svg" alt="shopping cart" />
-            <div class="cart-total">0</div>
-            <div class="cart-display">
-              <p class="cart-title">Cart</p>
-              <div class="cart-display-total">
-                <div class="cart-thumbnail">
-                  <img src="../images/image-product-1-thumbnail.jpg" alt="product thumbnail" />
+            <div v-if="props.cartTotal.length > 0" class="cart-total">{{ props.cartTotal[0] }}</div>
+            <div v-else class="cart-total">0</div>
+            <CartTotal>
+              <p class="cart-title text-dark">Cart</p>
+              <div v-if="props.cartTotal[0] && props.cartTotal[0] > 0">
+                <div class="cart-display-total">
+                  <div class="cart-thumbnail">
+                    <img src="../images/image-product-1-thumbnail.jpg" alt="product thumbnail" />
+                  </div>
+                  <div class="cart-details">
+                    <p>Fall Limited Edition Sneakers</p>
+                    <p>
+                      $125.00 x <span class="cart-quantity"> {{ props.cartTotal[0] }}</span
+                      ><span> ${{ props.cartTotal[0] * 125 }}</span>
+                    </p>
+                  </div>
+                  <button class="cart-delete">
+                    <img src="../images/icon-delete.svg" alt="delete icon" />
+                  </button>
                 </div>
-                <div class="cart-details">
-                  <p>Fall Limited Edition Sneakers</p>
-                  <p>
-                    $125.00 x <span class="cart-quantity">3</span
-                    ><span class="cart-display-total">$375.00</span>
-                  </p>
-                </div>
-                <button class="cart-delete">
-                  <img src="../images/icon-delete.svg" alt="delete icon" />
-                </button>
+                <button class="btn checkout-btn fw-bold">Checkout</button>
               </div>
-              <button class="btn checkout-btn fw-bold">Checkout</button>
-            </div>
+              <p class="class-empty" v-else>Your Cart is Empty</p>
+            </CartTotal>
           </div>
           <div class="avatar">
             <img src="../images/image-avatar.png" alt="avatar" style="width: 45px" />
@@ -173,18 +182,6 @@ ul {
   margin-left: 5px;
 }
 
-.cart-display {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 300px;
-  background: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  padding: 15px;
-  z-index: 10;
-}
-
 /* Cart Title */
 .cart-title {
   font-weight: bold;
@@ -242,6 +239,11 @@ ul {
 
 .checkout-btn:hover {
   background: #e65c00;
+}
+
+.class-empty {
+  text-align: center;
+  padding-block: 2rem;
 }
 
 @media (max-width: 50em) {
